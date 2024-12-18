@@ -18,16 +18,18 @@ end
 if is_equal
     % just nominal voltage
     semilogx(freq, Vpp);
+    yline(Vpeak/sqrt(2), "--");
     grid on;
     title("frequency response");
     xlabel("frequency in logrithmic scale");
     ylabel("Vpp");
+    figure;
     % this section handles conversion to dB
     for i = 1:length(Vpp)
-        Amp(i) = 20*log(Vpp(i)/Vpeak);
+        Amp(i) = 20*log10(Vpp(i));
     end
-    figure;
     semilogx(freq, Amp);
+    yline((20*log10(Vpeak))-3.01,"--");
     title("frequency response");
     xlabel("frequency in logrithmic scale");
     ylabel("dB");
