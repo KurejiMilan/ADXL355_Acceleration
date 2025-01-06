@@ -35,3 +35,11 @@ if is_equal
     ylabel("dB");
     grid on;
 end
+%%
+%generate latex table elements
+%the column vectors freq and Vpp must exist for this section of code to
+%make sense
+clc;    %just clear the previous prints 
+for i=1:length(Vpp)
+    fprintf('%d & %3.1f & %1.3f\\\\\n\\hline\n',i, freq(i), Vpp(i));
+end
