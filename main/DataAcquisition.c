@@ -49,10 +49,10 @@ inputs and an interrupt counter.
 	uint16_t ADCValue;
 	uint16_t index=0;
 
-	InitialiseHardware(); 
-	sprintf( Text,"\r\nMoin\r\n");
-	uart_puts(Text); 
-	_delay_ms(1000);
+	//InitialiseHardware(); 
+	//sprintf( Text,"\r\nMoin\r\n");
+	//uart_puts(Text); 
+	//_delay_ms(1000);
 	
 	while(1)
     {
@@ -68,7 +68,6 @@ inputs and an interrupt counter.
 			sample = 0;	
 		}
 		if (intnum == 10){
-			ADCValue /= 10;
 			sprintf(Text, "V=%d\r\n", ADCValue);
 			uart_puts(Text);
 			ADCValue = 0;
