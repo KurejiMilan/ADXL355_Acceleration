@@ -47,12 +47,13 @@ plot(x_axis, accel);
 grid;
 legend("acceleration");
 %%
-%summation
-sel_accel = accel(101:177);
-%sel_accel = accel(355:431); 3.6085
-%sel_accel = accel(554:633); -3.6267
-%sel_accel = accel(806:874); 3.6085
-%sel_accel = accel(1014:1085);
+%discrete summation to obtain the velocity and distance
+
+%sel_accel = accel(101:177); %-3.6849
+%sel_accel = accel(355:431); %3.6547
+%sel_accel = accel(554:633); %-3.6839
+%sel_accel = accel(806:874); %3.6085
+%sel_accel = accel(1014:1085);%-3.7053
 
 sel_accel = sel_accel-g;
 figure;
@@ -69,6 +70,7 @@ end
 compen = zeros(1,length(sel_accel));
 slope = (vel_profile(end)-vel_profile(1))/length(sel_accel);
 
+%obtain slope that is used to compensate for the drift
 for i=1:length(sel_accel)
     compen(i) = slope*i+vel_profile(1);
 end
@@ -81,19 +83,31 @@ plot(accel_x, compen);
 for i=1:length(sel_accel)
     vel_profile(i) = vel_profile(i)-compen(i);
 end
-%print after compensation
+%plot after compensation
 plot(accel_x, vel_profile);
 grid;
 legend("velocity", "velocity drift slope", "compensated velocity");
+
+%obtain distance with continius summation
 distance = 0;
 distance_profile = zeros(1,length(sel_accel));
 for i=1:length(sel_accel)
     distance = (vel_profile(i)*0.1)+distance;
     distance_profile(i) = distance;
 end
-
+%plot the final distance
 figure;
 plot(accel_x, distance_profile);
 legend("travelled distance");
 grid;
-%velsum
+
+%%
+% generate some statistic data to obtain how much reliable is the
+% measurement
+travelled_distances = [3.6849 3.6547 3.6839 3.6085 3.7053];
+mean = sum(travelled_distances)/length(travelled_distances);
+deviation = zeros(1, length(travelled_distances));
+for i=1:length(travelled_distances)
+    deviation(i) = (mean-travelled_distances(i))^2;
+end
+standard_deviation = sqrt(sum(deviation)/length(travelled_distances));
