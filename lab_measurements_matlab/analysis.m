@@ -5,6 +5,7 @@ sizeData = [1 Inf];
 Data = fscanf(data, formatSpec, sizeData);
 
 plot(linspace(1,1500,1500),Data);
+legend("measured data from experiment");
 grid;
 %%
 %chop of bad section;
@@ -44,24 +45,46 @@ accel = k1.*adc_reading+k0;
 figure;
 plot(x_axis, accel);
 grid;
+legend("acceleration");
 %%
 %summation
-sel_accel = accel(355:431);
-%sel_accel = accel(355:397);
+sel_accel = accel(101:177);
+%sel_accel = accel(355:431); 3.6085
+%sel_accel = accel(554:633); -3.6267
+%sel_accel = accel(806:874); 3.6085
+%sel_accel = accel(1014:1085);
+
 sel_accel = sel_accel-g;
 figure;
 accel_x = linspace(1, length(sel_accel),length(sel_accel));
 plot(accel_x, sel_accel);
 grid;
+legend("acceleration");
 velsum = 0;
 vel_profile = zeros(1,length(sel_accel));
 for i=1:length(sel_accel)
     velsum = (sel_accel(i)*0.1)+velsum;
     vel_profile(i) = velsum;
 end
+compen = zeros(1,length(sel_accel));
+slope = (vel_profile(end)-vel_profile(1))/length(sel_accel);
 
+for i=1:length(sel_accel)
+    compen(i) = slope*i+vel_profile(1);
+end
 figure;
 plot(accel_x, vel_profile);
+hold;
+plot(accel_x, compen);
+
+%compensating
+for i=1:length(sel_accel)
+    vel_profile(i) = vel_profile(i)-compen(i);
+end
+%print after compensation
+plot(accel_x, vel_profile);
+grid;
+legend("velocity", "velocity drift slope", "compensated velocity");
 distance = 0;
 distance_profile = zeros(1,length(sel_accel));
 for i=1:length(sel_accel)
@@ -71,4 +94,6 @@ end
 
 figure;
 plot(accel_x, distance_profile);
+legend("travelled distance");
+grid;
 %velsum
