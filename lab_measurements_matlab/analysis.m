@@ -53,7 +53,7 @@ legend("acceleration");
 %sel_accel = accel(355:431); %3.6547
 %sel_accel = accel(554:633); %-3.6839
 %sel_accel = accel(806:874); %3.6085
-%sel_accel = accel(1014:1085);%-3.7053
+sel_accel = accel(1014:1085);%-3.7053
 
 sel_accel = sel_accel-g;
 figure;
